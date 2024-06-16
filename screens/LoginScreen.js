@@ -7,6 +7,8 @@ import {
   TextInput,
   Text,
   View,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
 import { auth, connectToDatabase } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -21,7 +23,9 @@ export default function LoginScreen({ navigation }) {
     signInWithEmailAndPassword(auth, email, password)
       .then(async () => {
         const user = auth.currentUser;
-        const userDoc = await getDoc(doc(connectToDatabase(), "users", user.uid));
+        const userDoc = await getDoc(
+          doc(connectToDatabase(), "users", user.uid)
+        );
         const userRole = userDoc.data().role;
 
         if (userRole === "admin") {
@@ -35,62 +39,63 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.top_image}
-        source={require("../photos/Vector 1.png")}
-        resizeMode="cover"
-      />
+        <KeyboardAvoidingView style={styles.container}>
+      <ScrollView>
+          <Image
+            style={styles.top_image}
+            source={require("../photos/Vector 1.png")}
+            resizeMode="cover"
+          />
 
-      <View style={styles.abs_image}>
-      </View>
-      <View style={styles.form_container}>
-        <View style={styles.form_title_container}>
-          <Text style={styles.heading}>Login</Text>
-        </View>
-        <View style={styles.form}>
-          <View style={styles.form_input1}>
-            <TextInput
-              placeholder="E-mail"
-              placeholderTextColor={"gray"}
-              value={email}
-              onChangeText={setEmail}
-            />
+          <View style={styles.abs_image}></View>
+          <View style={styles.form_container}>
+            <View style={styles.form_title_container}>
+              <Text style={styles.heading}>Login</Text>
+            </View>
+            <View style={styles.form}>
+              <View style={styles.form_input1}>
+                <TextInput
+                  placeholder="E-mail"
+                  placeholderTextColor={"gray"}
+                  value={email}
+                  onChangeText={setEmail}
+                />
+              </View>
+              <View style={styles.form_input2}>
+                <TextInput
+                  placeholder="Password"
+                  placeholderTextColor={"gray"}
+                  secureTextEntry
+                  value={password}
+                  onChangeText={setPassword}
+                />
+              </View>
+              <TouchableOpacity>
+                <Text style={styles.forgot}>Forgot Password ?</Text>
+              </TouchableOpacity>
+              {error ? <Text style={styles.error}>{error}</Text> : null}
+              <View style={styles.button}>
+                <TouchableOpacity style={styles.btn} onPress={handleLogin}>
+                  <Text style={styles.btn_text}>Login</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.account}>
+                <Text style={styles.account_text}>Don't have an account? </Text>
+                <TouchableOpacity>
+                  <Text
+                    style={styles.btn_signup}
+                    onPress={() => {
+                      navigation.navigate("Signup");
+                    }}
+                  >
+                    SignUp
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-          <View style={styles.form_input2}>
-            <TextInput
-              placeholder="Password"
-              placeholderTextColor={"gray"}
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
-          <TouchableOpacity>
-            <Text style={styles.forgot}>Forgot Password ?</Text>
-          </TouchableOpacity>
-          {error ? <Text style={styles.error}>{error}</Text> : null}
-          <View style={styles.button}>
-            <TouchableOpacity style={styles.btn} onPress={handleLogin}>
-              <Text style={styles.btn_text}>Login</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.account}>
-            <Text style={styles.account_text}>Don't have an account? </Text>
-            <TouchableOpacity>
-              <Text
-                style={styles.btn_signup}
-                onPress={() => {
-                  navigation.navigate("Signup");
-                }}
-              >
-                SignUp
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -100,12 +105,12 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
   },
-  forgot : {
-    position:"absolute",
+  forgot: {
+    position: "absolute",
     right: 0,
     marginTop: 5,
-    color:'#4D9899',
-    paddingRight:70,
+    color: "#4D9899",
+    paddingRight: 70,
   },
   top_image: {
     position: "absolute",
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   form_container: {
-    paddingTop:'50%',
+    paddingTop: "50%",
     height: "100%",
     width: "100%",
     display: "flex",

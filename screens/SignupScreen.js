@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ToastAndroid } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { auth, connectToDatabase } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc } from 'firebase/firestore';
@@ -30,21 +30,21 @@ export default function SignupScreen({ navigation }) {
           navigation.replace('Login');
         })
         .catch(error => setError(error.message));
-    };
-
-    return (
-      <View style={styles.container}>
+      };
+      
+      return (
+        <KeyboardAvoidingView style={styles.container}>
+        <ScrollView>
         <Image
           style={styles.top_image}
           source={require("../photos/Vector 1.png")}
           resizeMode="cover"
-        />
+          />
         <View style={styles.abs_image}>
           <Image
             style={styles.abs_image1}
-            source={require("../photos/Rectangle 1.png")}
-            resizeMode="contain"
-          />
+            resizeMode="cover"
+            />
         </View>
         <View style={styles.form_container}>
           <View style={styles.form_title_container}>
@@ -57,7 +57,7 @@ export default function SignupScreen({ navigation }) {
                 placeholderTextColor={"gray"}
                 value={email}
                 onChangeText={setEmail}
-              />
+                />
             </View>
             <View style={styles.form_input2}>
               <TextInput
@@ -66,7 +66,7 @@ export default function SignupScreen({ navigation }) {
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
-              />
+                />
             </View>
             <View style={styles.form_input3}>
               <TextInput
@@ -75,7 +75,7 @@ export default function SignupScreen({ navigation }) {
                 secureTextEntry
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
-              />
+                />
             </View>
             {error ? <Text style={styles.error}>{error}</Text> : null}
             <View style={styles.button}>
@@ -91,20 +91,21 @@ export default function SignupScreen({ navigation }) {
                   onPress={() => {
                     navigation.navigate("Login");
                   }}
-                >
+                  >
                   SignIn
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
+</KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      backgroundColor: "#ffffff",
+  container: {
+    backgroundColor: "#ffffff",
       height: "100%",
       width: "100%",
     },
