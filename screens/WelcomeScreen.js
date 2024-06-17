@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   ImageBackground,
+  StatusBar
 } from "react-native";
 
 const WelcomeScreen = ({ navigation }) => {
@@ -14,7 +15,7 @@ const WelcomeScreen = ({ navigation }) => {
         source={require("../photos/pexels-photo-733852.webp")}
         style={styles.background}
       >
-          <Text style={styles.welcomeText}>Welcome</Text>
+        <Text style={styles.welcomeText}>Welcome</Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.btn1}
@@ -34,6 +35,11 @@ const WelcomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
+      <StatusBar
+        style="auto"
+        backgroundColor="transparent"
+        translucent={true}
+      />
     </View>
   );
 };

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  StatusBar
 } from "react-native";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
@@ -40,6 +41,11 @@ export default function UserScreen({ navigation }) {
           <Button title="Sign Out" onPress={handleSignOut} color="#841584" />
         )}
       </View>
+      <StatusBar
+        style="auto"
+        backgroundColor="transparent"
+        translucent={true}
+      />
     </SafeAreaView>
   );
 }

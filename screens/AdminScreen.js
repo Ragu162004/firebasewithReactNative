@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   FlatList,
   Alert,
+  StatusBar
 } from "react-native";
 import { auth, connectToDatabase} from "../firebase";
 import { signOut } from "firebase/auth";
@@ -79,9 +80,19 @@ export default function AdminScreen({ navigation }) {
         {loading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
-          <Button title="Sign Out" onPress={handleSignOut}  color="#841584" style={styles.button} />
+          <Button
+            title="Sign Out"
+            onPress={handleSignOut}
+            color="#841584"
+            style={styles.button}
+          />
         )}
       </View>
+      <StatusBar
+        style="auto"
+        backgroundColor="transparent"
+        translucent={true}
+      />
     </SafeAreaView>
   );
 }

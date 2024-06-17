@@ -1,16 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar} from 'react-native';
 
 const ErrorScreen = ({ onCheck }) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Something Went Wrong...</Text>
-        <Text style={styles.message}>Please check your internet connectivity and try again later.</Text>
+        <Text style={styles.message}>
+          Please check your internet connectivity and try again later.
+        </Text>
         <TouchableOpacity style={styles.button} onPress={onCheck}>
           <Text style={styles.buttonText}>Retry</Text>
         </TouchableOpacity>
       </View>
+      <StatusBar
+        style="auto"
+        backgroundColor="transparent"
+        translucent={true}
+      />
     </View>
   );
 }

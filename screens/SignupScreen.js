@@ -1,29 +1,49 @@
 // screens/SignupScreen.js
-import React, { useState } from 'react';
-import { StatusBar } from 'react-native';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
-import { auth, connectToDatabase } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc } from 'firebase/firestore';
+import React, { useState } from "react";
+import { KeyboardAvoidingView, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import { auth, connectToDatabase } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function SignupScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('user');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("user");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSignup = async () => {
     const db = connectToDatabase();
-     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!#%*?&]{6,}$/;
+    const passwordPattern =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!#%*?&]{6,}$/;
 
+    const specialCharacterPattern = /[@$!#%*?&]/;
+    
+    if (!specialCharacterPattern.test(password)) {
+      setError(
+        "Password must contain at least one special character (@$!#%*?&)."
+      );
+      return;
+    }
     if (!passwordPattern.test(password)) {
-      setError("Password must contain at least 6 letters and it must be strong password");
+      setError(
+        "Password must contain at least 6 letters and it must be strong password"
+      );
       return;
     }
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("Password does not match");
       return;
     }
 
@@ -35,88 +55,90 @@ export default function SignupScreen({ navigation }) {
         if (user) {
           await setDoc(doc(db, "users", user.uid), {
             email: user.email,
-            role: role
+            role: role,
           });
         }
         setIsLoading(false);
-        navigation.replace('Login');
+        navigation.replace("Login");
       })
-      .catch(error => {
+      .catch((error) => {
         setIsLoading(false);
         setError(error.message);
       });
   };
 
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.top_image}
-        source={require("../photos/Vector 1.png")}
-        resizeMode="cover"
-      />
-      <View style={styles.abs_image}>
-      </View>
-      <View style={styles.form_container}>
-        <View style={styles.form_title_container}>
-          <Text style={styles.heading}>Register</Text>
-        </View>
-        <View style={styles.form}>
-          <View style={styles.form_input1}>
-            <TextInput
-              placeholder="E-Mail"
-              placeholderTextColor={"gray"}
-              value={email}
-              onChangeText={setEmail}
-            />
+    <KeyboardAvoidingView style={styles.container}>
+      <ScrollView>
+        <Image
+          style={styles.top_image}
+          source={require("../photos/Vector 1.png")}
+          resizeMode="cover"
+        />
+        <View style={styles.form_container}>
+          <View style={styles.form_title_container}>
+            <Text style={styles.heading}>Register</Text>
           </View>
-          <View style={styles.form_input2}>
-            <TextInput
-              placeholder="New Password"
-              placeholderTextColor={"gray"}
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
-          <View style={styles.form_input3}>
-            <TextInput
-              placeholder="Confirm Password"
-              placeholderTextColor={"gray"}
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
-          </View>
-          {error ? <Text style={styles.error}>{error}</Text> : null}
-          {isLoading ? (
-            <View style={styles.activityIndicator}>
-            <ActivityIndicator size="large" color="#4D9899" />
-            <Text style={styles.loadingText}>signing-in, please wait...</Text>
+          <View style={styles.form}>
+            <View style={styles.form_input1}>
+              <TextInput
+                placeholder="E-Mail"
+                placeholderTextColor={"gray"}
+                value={email}
+                onChangeText={setEmail}
+              />
             </View>
-          ) : (
-            <View style={styles.button}>
-              <TouchableOpacity style={styles.btn} onPress={handleSignup}>
-                <Text style={styles.btn_text}>Register</Text>
+            <View style={styles.form_input2}>
+              <TextInput
+                placeholder="New Password"
+                placeholderTextColor={"gray"}
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+              />
+            </View>
+            <View style={styles.form_input3}>
+              <TextInput
+                placeholder="Confirm Password"
+                placeholderTextColor={"gray"}
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
+            </View>
+            {error ? <Text style={styles.error}>{error}</Text> : null}
+            {isLoading ? (
+              <View style={styles.activityIndicator}>
+                <ActivityIndicator size="large" color="#4D9899" />
+                <Text style={styles.loadingText}>
+                  signing-in, please wait...
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.button}>
+                <TouchableOpacity style={styles.btn} onPress={handleSignup}>
+                  <Text style={styles.btn_text}>Register</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            <View style={styles.account}>
+              <Text style={styles.account_text}>Already have an account? </Text>
+              <TouchableOpacity>
+                <Text
+                  style={styles.btn_signup}
+                  onPress={() => {
+                    navigation.navigate("Login");
+                  }}
+                >
+                  SignIn
+                </Text>
               </TouchableOpacity>
             </View>
-          )}
-          <View style={styles.account}>
-            <Text style={styles.account_text}>Already have an account? </Text>
-            <TouchableOpacity>
-              <Text
-                style={styles.btn_signup}
-                onPress={() => {
-                  navigation.navigate("Login");
-                }}
-              >
-                SignIn
-              </Text>
-            </TouchableOpacity>
           </View>
         </View>
-      </View>
-      <StatusBar style="auto" />
-    </View>
+        <StatusBar style="auto" backgroundColor='transparent' translucent={true}/>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -135,7 +157,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   form_container: {
-    paddingTop: '45%',
+    paddingTop: "45%",
     height: "100%",
     width: "100%",
     display: "flex",
@@ -159,8 +181,8 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     margin: 4,
-    marginVertical: 4,
-    gap: 4,
+    marginVertical: 1,
+    gap: 2,
   },
   form_input1: {
     backgroundColor: "#EBEBEB",
@@ -190,7 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#4D9899",
     padding: 15,
     borderRadius: 20,
-    marginTop: 30,
+    marginTop: 10,
   },
   btn_text: {
     fontSize: 20,
@@ -207,7 +229,7 @@ const styles = StyleSheet.create({
     color: "#006B6C",
   },
   error: {
-    color: 'red',
+    color: "red",
     marginTop: 10,
   },
 });

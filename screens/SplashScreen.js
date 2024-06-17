@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, StatusBar } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -7,8 +7,13 @@ const SplashScreen = () => {
     <SafeAreaView style={styles.container}>
       <Text style={styles.logo}>Client Logo</Text>
       <Text style={styles.promotion}>Powered by Sample</Text>
+      <StatusBar
+        style="auto"
+        backgroundColor="transparent"
+        translucent={true}
+      />
     </SafeAreaView>
-  )
+  );
 }
 
 export default SplashScreen
