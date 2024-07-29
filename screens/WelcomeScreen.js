@@ -11,7 +11,7 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../photos/pexels-photo-733852.webp")}
+        source={require("../photos/iPhone 14 & 15 Pro Max - 1.png")}
         style={styles.background}
       >
           <Text style={styles.welcomeText}>Welcome</Text>

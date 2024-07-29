@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import RouterStack from "./Navigation/Routerstack";
 import { connectToDatabase } from "./firebase";
 import SplashScreen from "./screens/SplashScreen";
+import ErrorScreen from "./screens/ErrorScreen";
 
 const Stack = createStackNavigator();
 
